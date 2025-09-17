@@ -18,6 +18,27 @@ p.lead{margin:4px 0 0; color:var(--muted); font-size:13px}
 
 label{display:block; font-size:13px; color:var(--muted); margin-bottom:6px}
 .input, select{width:100%; padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.04); background:var(--glass); color:inherit; font-size:15px}
+
+/* Select dropdown styling */
+select {
+    background-color: var(--card) !important;
+    color: #e6eef6 !important;
+    border: 1px solid rgba(255,255,255,0.04) !important;
+}
+
+select option {
+    background-color: var(--bg) !important;
+    color: #e6eef6 !important;
+}
+
+select option:hover,
+select option:focus,
+select option:active,
+select option:checked {
+    background-color: var(--accent) !important;
+    color: #002 !important;
+}
+
 .row{display:flex; gap:10px}
 .row .col{flex:1}
 
