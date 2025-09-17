@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Forex Risk Manager — Lot Size Calculator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>Forex Risk Manager</h1>
+        <p class="lead">Calculate recommended lot size from entry, stop loss, account balance and risk %</p>
+      </div>
+      <div class="chip">Mobile-friendly • No account required</div>
+    </header>
+
+    <main class="grid">
+      <!-- Left / Inputs -->
+      <section class="card">
+        <form id="calcForm" onsubmit="return false;">
+          <div>
+            <label for="pair">Currency Pair</label>
+            <select id="pair" class="input">
+              <!-- Major Pairs -->
+              <option value="EURUSD">EUR/USD</option>
+              <option value="GBPUSD">GBP/USD</option>
+              <option value="USDJPY">USD/JPY</option>
+              <option value="USDCHF">USD/CHF</option>
+              <option value="AUDUSD">AUD/USD</option>
+              <option value="USDCAD">USD/CAD</option>
+              <option value="NZDUSD">NZD/USD</option>
+              
+              <!-- Euro Crosses -->
+              <option value="EURGBP">EUR/GBP</option>
+              <option value="EURJPY">EUR/JPY</option>
+              <option value="EURCHF">EUR/CHF</option>
+              <option value="EURAUD">EUR/AUD</option>
+              <option value="EURCAD">EUR/CAD</option>
+              <option value="EURNZD">EUR/NZD</option>
+
+              <!-- GBP Crosses -->
+              <option value="GBPJPY">GBP/JPY</option>
+              <option value="GBPCHF">GBP/CHF</option>
+              <option value="GBPAUD">GBP/AUD</option>
+              <option value="GBPCAD">GBP/CAD</option>
+              <option value="GBPNZD">GBP/NZD</option>
+
+              <!-- Other Crosses -->
+              <option value="AUDCHF">AUD/CHF</option>
+              <option value="AUDCAD">AUD/CAD</option>
+              <option value="AUDJPY">AUD/JPY</option>
+              <option value="AUDNZD">AUD/NZD</option>
+              <option value="CADJPY">CAD/JPY</option>
+              <option value="CADCHF">CAD/CHF</option>
+              <option value="CHFJPY">CHF/JPY</option>
+              <option value="NZDJPY">NZD/JPY</option>
+              <option value="NZDCHF">NZD/CHF</option>
+              <option value="NZDCAD">NZD/CAD</option>
+
+              <!-- Commodities & Indices -->
+              <option value="XAUUSD">XAU/USD (Gold)</option>
+              <option value="US30">Dow Jones (US30)</option>
+              <option value="USTECH">NASDAQ</option>
+            </select>
+          </div>
+
+          <div style="margin-top:12px">
+            <label>Entry Price / Stop Loss</label>
+            <div class="row">
+              <div class="col">
+                <input id="entry" class="input" type="number" step="any" placeholder="Entry price" />
+              </div>
+              <div class="col">
+                <input id="stop" class="input" type="number" step="any" placeholder="Stop loss price" />
+              </div>
+            </div>
+            <div class="small">Enter the price where you will open the trade and the stop-loss price. The order can be buy or sell.</div>
+          </div>
+
+          <div style="margin-top:12px">
+            <label>Account Balance and Risk</label>
+            <div class="row">
+              <div class="col">
+                <input id="balance" class="input" type="number" step="any" placeholder="Account balance (e.g., 5000)" />
+              </div>
+              <div style="width:120px">
+                <input id="riskPct" class="input" type="number" step="any" placeholder="Risk %" />
+              </div>
+            </div>
+            <div class="small">Risk % is how much of the balance you are willing to lose if the stop loss is hit (e.g., 1 = 1%).</div>
+          </div>
+
+          <div style="margin-top:12px">
+            <label>Take Profit Multiplier (1-10)</label>
+            <input id="tp" class="input" type="number" min="1" max="10" step="1" placeholder="Enter a number between 1-10" />
+          </div>
+
+          <div class="actions">
+            <button id="calcBtn" type="button">Calculate</button>
+            <button id="resetBtn" type="button" class="secondary">Reset</button>
+            <button id="copyBtn" type="button" class="secondary">Copy Result</button>
+          </div>
+        </form>
+
+        <div style="margin-top:12px" class="result" id="resultCard" aria-live="polite">
+          <div class="item"><div class="muted">Lot size</div><div id="lot" class="big muted">—</div></div>
+          <div class="item"><div class="muted">Amount risked</div><div id="riskAmt">—</div></div>
+          <div class="item"><div class="muted">Pip distance</div><div id="pipDist">—</div></div>
+          <div class="item"><div class="muted">Potential loss (account curr)</div><div id="potLoss">—</div></div>
+          <div class="item"><div class="muted">Potential profit (if TP)</div><div id="potProfit">—</div></div>
+        </div>
+      </section>
+
+      <!-- Right / Info & Presets -->
+      <aside class="card">
+        <h3 style="margin:0 0 8px 0">Calculator notes</h3>
+        <p class="small">This demo converts pip distance into lot size using commonly accepted pip-value approximations for standard lots (100,000 units). It assumes the account currency is the quote currency in most pairs (e.g., USD for EUR/USD). Use it as a fast calculator — for production connect to live prices and currency conversion rates.</p>
+
+        <div style="margin-top:12px">
+          <label class="small">Quick risk presets</label>
+          <div class="row" style="margin-top:8px">
+            <button class="secondary" onclick="setRisk(0.5)">0.5%</button>
+            <button class="secondary" onclick="setRisk(1)">1%</button>
+            <button class="secondary" onclick="setRisk(2)">2%</button>
+            <button class="secondary" onclick="setRisk(3)">3%</button>
+          </div>
+        </div>
+
+        <div style="margin-top:12px">
+          <label class="small">Examples</label>
+          <p class="small">Entry: 1.0820, Stop: 1.0770, Balance: 5000, Risk: 1% → 50 USD risk. If pip distance = 50 pips and pip value per 1 lot ≈ 10 USD (EUR/USD) → 0.1 lot.</p>
+        </div>
+
+        <div style="margin-top:12px" class="small">Built for traders who want a quick, reliable lot-size calculator on their phone.
+        </div>
+      </aside>
+    </main>
+
+    <footer>
+      <small>Note: This is a client-side calculator for educational/demo purposes only. Always validate with your broker.</small>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
