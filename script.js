@@ -139,9 +139,9 @@ function compute(){
 
   // update UI
   document.getElementById('lot').textContent = Number(lot).toFixed(2) + ' lots';
-  document.getElementById('riskAmt').textContent = fmt(riskCapital,2) + ' (account currency)';
+  document.getElementById('riskAmt').textContent = fmt(riskCapital,2) + ' $';
   document.getElementById('pipDist').textContent = fmt(pipDistance,2) + ' pips';
-  document.getElementById('potLoss').textContent = fmt(potentialLoss,2) + ' (approx)';
+  document.getElementById('potLoss').textContent = '$ ' + fmt(potentialLoss,2);
   document.getElementById('potProfit').textContent = potentialProfit === null ? '—' : 
     `${fmt(potentialProfit,2)} (TP price: ${fmt(takeProfitPrice,5)})`;
 }
