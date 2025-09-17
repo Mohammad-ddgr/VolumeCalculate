@@ -21,21 +21,34 @@ label{display:block; font-size:13px; color:var(--muted); margin-bottom:6px}
 
 /* Select dropdown styling */
 select {
-    background-color: var(--card) !important;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: var(--card) !important;
     color: #e6eef6 !important;
     border: 1px solid rgba(255,255,255,0.04) !important;
+}
+
+select::-ms-expand {
+    display: none;
 }
 
 select option {
     background-color: var(--bg) !important;
     color: #e6eef6 !important;
+    padding: 10px !important;
+}
+
+select:focus {
+    outline: none;
+    border-color: var(--accent) !important;
 }
 
 select option:hover,
 select option:focus,
 select option:active,
 select option:checked {
-    background-color: var(--accent) !important;
+    background: var(--accent) !important;
     color: #002 !important;
 }
 
